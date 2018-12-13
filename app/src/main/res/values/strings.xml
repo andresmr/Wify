@@ -2,5 +2,9 @@
     <string name="app_name">Wify</string>
     <string name="ssid">SSID</string>
     <string name="password">Pass</string>
-    <string name="scan">Scan</string>
+    <string name="write_button">Write Tag</string>
+    <string name="scan_info">Bring the device to tha tag</string>
+    <string name="error_field_null">The field can not be null</string>
+    <string name="write_tag_success">Tag has successfully been written</string>
+    <string name="write_tag_error">There has been an error, please try again</string>
 </resources>
