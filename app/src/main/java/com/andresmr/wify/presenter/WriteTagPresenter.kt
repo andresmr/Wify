@@ -7,7 +7,11 @@ class WriteTagPresenter(private val view: View,
                         private val createNetInteractor: CreateNetInteractor) {
 
     init {
-        view.setListeners()
+        view.showScanInfo()
+    }
+
+    fun onResume() {
+        view.enableNFCInForeground()
     }
 
     fun onPause() {
@@ -15,36 +19,28 @@ class WriteTagPresenter(private val view: View,
         view.hideScanInfo()
     }
 
-    fun onWriteTagClick(ssid: String, password: String) {
+    fun onTagDetected(ssid: String, password: String) {
         when {
             ssid.isEmpty() -> view.showErrorOnSSID()
             password.isEmpty() -> view.showErrorOnPassword()
             else -> {
-                view.enableNFCInForeground()
-                view.showScanInfo()
+                val net = createNetInteractor.execute(ssid, password)
+                view.writeNetOnTag(net)
             }
         }
-    }
-
-    fun onTagDetected(ssid: String, password: String) {
-        val net = createNetInteractor.execute(ssid, password)
-        view.writeNetOnTag(net)
     }
 
     fun onWriteOnTagSuccessful() {
         view.vibrate()
         view.showWriteOnTagSuccessfulInfo()
-        view.pauseNFCInForeground()
     }
 
     fun onWriteOnTagError() {
         view.vibrate()
         view.showWriteOnTagErrorInfo()
-        view.pauseNFCInForeground()
     }
 
     interface View {
-        fun setListeners()
         fun enableNFCInForeground()
         fun pauseNFCInForeground()
         fun showScanInfo()

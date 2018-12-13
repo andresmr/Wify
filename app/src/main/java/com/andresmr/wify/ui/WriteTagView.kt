@@ -12,21 +12,19 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.appcompat.app.AppCompatActivity
-import com.andresmr.wify.ui.util.NFCUtil
-import com.andresmr.wify.entity.Net
 import com.andresmr.wify.R
 import com.andresmr.wify.domain.CreateNetInteractor
+import com.andresmr.wify.entity.Net
 import com.andresmr.wify.presenter.WriteTagPresenter
-import kotlinx.android.synthetic.main.write_tag_view.password
-import kotlinx.android.synthetic.main.write_tag_view.scanningInfo
-import kotlinx.android.synthetic.main.write_tag_view.ssid
-import kotlinx.android.synthetic.main.write_tag_view.writeTagButton
+import com.andresmr.wify.ui.util.NFCUtil
+import kotlinx.android.synthetic.main.write_tag_view.*
 
 class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
 
     private lateinit var nfcAdapter: NfcAdapter
     private lateinit var presenter: WriteTagPresenter
     private lateinit var nfcUtil: NFCUtil
+    private var tag: Tag? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +34,11 @@ class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
         nfcUtil = NFCUtil()
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.onResume()
+    }
+
     override fun onPause() {
         super.onPause()
         presenter.onPause()
@@ -43,13 +46,13 @@ class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        presenter.onTagDetected(ssid.editText!!.text.toString(), password.editText!!.text.toString())
-    }
-
-    override fun setListeners() {
-        writeTagButton.setOnClickListener {
-            presenter.onWriteTagClick(ssid.editText!!.text.toString(),
-                    password.editText!!.text.toString())
+        intent?.let {
+            if (NfcAdapter.ACTION_TECH_DISCOVERED == intent.action) {
+                tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+                tag?.let {
+                    presenter.onTagDetected(ssid.editText!!.text.toString(), password.editText!!.text.toString())
+                }
+            }
         }
     }
 
@@ -85,9 +88,7 @@ class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
     }
 
     override fun writeNetOnTag(net: Net) {
-        val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
-
-        if (nfcUtil.writeOnTag(net, tag)) {
+        if (nfcUtil.writeOnTag(net, tag!!)) {
             presenter.onWriteOnTagSuccessful()
         } else {
             presenter.onWriteOnTagError()
