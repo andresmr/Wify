@@ -66,7 +66,7 @@ class NFCUtil {
               if (ndefFormatable != null) {
                   try {
                       ndefFormatable.connect()
-                      ndefFormatable.format(nfcMessage) // FIXME: try without AAR if message too big
+                      ndefFormatable.format(nfcMessage)
                       return true
                   } catch (e: IOException) {
                       Log.w(TAG, "Tag not formatted")
