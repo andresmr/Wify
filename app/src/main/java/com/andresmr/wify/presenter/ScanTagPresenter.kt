@@ -1,6 +1,6 @@
 package com.andresmr.wify.presenter
 
-import com.andresmr.wify.entity.Net
+import com.andresmr.wify.entity.WifiNetwork
 
 class ScanTagPresenter(private val view: View) {
 
@@ -12,10 +12,10 @@ class ScanTagPresenter(private val view: View) {
         view.pauseNFCInForeground()
     }
 
-    fun onTagRead(net: Net) {
+    fun onTagRead(wifiNetwork: WifiNetwork) {
         view.vibrate()
-        view.showSSID(net.ssid)
-        view.showPassword(net.password)
+        view.showSSID(wifiNetwork.ssid)
+        view.showPassword(wifiNetwork.password)
     }
 
     fun onWriteTagClick() {

@@ -1,10 +1,10 @@
 package com.andresmr.wify.presenter
 
-import com.andresmr.wify.domain.CreateNetInteractor
-import com.andresmr.wify.entity.Net
+import com.andresmr.wify.domain.CreateWifiNetworkInteractor
+import com.andresmr.wify.entity.WifiNetwork
 
 class WriteTagPresenter(private val view: View,
-                        private val createNetInteractor: CreateNetInteractor) {
+                        private val createWifiNetworkInteractor: CreateWifiNetworkInteractor) {
 
     init {
         view.showScanInfo()
@@ -24,7 +24,7 @@ class WriteTagPresenter(private val view: View,
             ssid.isEmpty() -> view.showErrorOnSSID()
             password.isEmpty() -> view.showErrorOnPassword()
             else -> {
-                val net = createNetInteractor.execute(ssid, password)
+                val net = createWifiNetworkInteractor.execute(ssid, password)
                 view.writeNetOnTag(net)
             }
         }
@@ -47,7 +47,7 @@ class WriteTagPresenter(private val view: View,
         fun hideScanInfo()
         fun showErrorOnSSID()
         fun showErrorOnPassword()
-        fun writeNetOnTag(net: Net)
+        fun writeNetOnTag(wifiNetwork: WifiNetwork)
         fun showWriteOnTagSuccessfulInfo()
         fun showWriteOnTagErrorInfo()
         fun vibrate()

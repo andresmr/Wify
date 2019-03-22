@@ -13,8 +13,8 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.appcompat.app.AppCompatActivity
 import com.andresmr.wify.R
-import com.andresmr.wify.domain.CreateNetInteractor
-import com.andresmr.wify.entity.Net
+import com.andresmr.wify.domain.CreateWifiNetworkInteractor
+import com.andresmr.wify.entity.WifiNetwork
 import com.andresmr.wify.presenter.WriteTagPresenter
 import com.andresmr.wify.ui.util.NFCUtil
 import kotlinx.android.synthetic.main.write_tag_view.*
@@ -30,7 +30,7 @@ class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.write_tag_view)
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
-        presenter = WriteTagPresenter(this, CreateNetInteractor())
+        presenter = WriteTagPresenter(this, CreateWifiNetworkInteractor())
         nfcUtil = NFCUtil()
     }
 
@@ -47,7 +47,7 @@ class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.let {
-            if (NfcAdapter.ACTION_TECH_DISCOVERED == intent.action) {
+            if (NfcAdapter.ACTION_TECH_DISCOVERED == intent.action || NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
                 tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
                 tag?.let {
                     presenter.onTagDetected(ssid.editText!!.text.toString(), password.editText!!.text.toString())
@@ -87,8 +87,8 @@ class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
 
     }
 
-    override fun writeNetOnTag(net: Net) {
-        if (nfcUtil.writeOnTag(net, tag!!)) {
+    override fun writeNetOnTag(wifiNetwork: WifiNetwork) {
+        if (nfcUtil.writeOnTag(wifiNetwork, tag!!)) {
             presenter.onWriteOnTagSuccessful()
         } else {
             presenter.onWriteOnTagError()

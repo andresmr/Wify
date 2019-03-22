@@ -13,7 +13,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.appcompat.app.AppCompatActivity
 import com.andresmr.wify.R
-import com.andresmr.wify.entity.Net
+import com.andresmr.wify.entity.WifiNetwork
 import com.andresmr.wify.presenter.ScanTagPresenter
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), ScanTagPresenter.View {
                     }.toTypedArray()
 
                     val nfcMessage = String(nDefMessages.first().records[1].payload)
-                    val net = Gson().fromJson(nfcMessage, Net::class.java)
+                    val net = Gson().fromJson(nfcMessage, WifiNetwork::class.java)
                     presenter.onTagRead(net)
                 }
                 toast("Unknown tag")

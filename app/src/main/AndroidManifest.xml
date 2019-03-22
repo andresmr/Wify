@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.andresmr.wify">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -21,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.WriteTagView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,12 +31,9 @@
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data
-                    android:host="andresmr.com"
-                    android:scheme="http" />
+                <data android:mimeType="application/vnd.wfa.wsc" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.WriteTagView" />
     </application>
 
 </manifest>
