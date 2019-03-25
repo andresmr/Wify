@@ -16,14 +16,14 @@ import com.andresmr.wify.R
 import com.andresmr.wify.domain.CreateWifiNetworkInteractor
 import com.andresmr.wify.entity.WifiNetwork
 import com.andresmr.wify.presenter.WriteTagPresenter
-import com.andresmr.wify.ui.util.NFCUtil
+import com.andresmr.wify.ui.extensions.generateNdefMessage
+import com.andresmr.wify.ui.extensions.writeWifiNetwork
 import kotlinx.android.synthetic.main.write_tag_view.*
 
 class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
 
     private lateinit var nfcAdapter: NfcAdapter
     private lateinit var presenter: WriteTagPresenter
-    private lateinit var nfcUtil: NFCUtil
     private var tag: Tag? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +31,6 @@ class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
         setContentView(R.layout.write_tag_view)
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
         presenter = WriteTagPresenter(this, CreateWifiNetworkInteractor())
-        nfcUtil = NFCUtil()
     }
 
     override fun onResume() {
@@ -88,7 +87,7 @@ class WriteTagView : AppCompatActivity(), WriteTagPresenter.View {
     }
 
     override fun writeNetOnTag(wifiNetwork: WifiNetwork) {
-        if (nfcUtil.writeOnTag(wifiNetwork, tag!!)) {
+        if (tag!!.writeWifiNetwork(wifiNetwork.generateNdefMessage())) {
             presenter.onWriteOnTagSuccessful()
         } else {
             presenter.onWriteOnTagError()
