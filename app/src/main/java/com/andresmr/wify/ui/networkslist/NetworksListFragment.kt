@@ -10,7 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.andresmr.wify.R
 import com.andresmr.wify.entity.WifiNetwork
+import com.andresmr.wify.ui.networkdetail.NetworkDetailView
 import kotlinx.android.synthetic.main.networks_list_fragment.*
+import org.jetbrains.anko.support.v4.startActivity
 
 class NetworksListFragment : Fragment() {
 
@@ -31,7 +33,7 @@ class NetworksListFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(NetworksListViewModel::class.java)
         viewModel.getWifiNetworks().observe(this, Observer<List<WifiNetwork>> {
             val adapter = NetworksListAdapter(it) {
-                //startActivity<ProjectDetailView>("id" to it.id)
+                startActivity<NetworkDetailView>("ssid" to it.ssid)
             }
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
