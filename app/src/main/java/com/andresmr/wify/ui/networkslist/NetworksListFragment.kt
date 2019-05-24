@@ -12,6 +12,7 @@ import com.andresmr.wify.R
 import com.andresmr.wify.entity.WifiNetwork
 import com.andresmr.wify.ui.networkdetail.NetworkDetailView
 import kotlinx.android.synthetic.main.networks_list_fragment.*
+import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 
 class NetworksListFragment : Fragment() {
@@ -23,21 +24,28 @@ class NetworksListFragment : Fragment() {
     private lateinit var viewModel: NetworksListViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.networks_list_fragment, container, false)
-    }
+                              savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.networks_list_fragment, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(context)
         viewModel = ViewModelProviders.of(this).get(NetworksListViewModel::class.java)
+        swipeRefreshLayout.isRefreshing = true
+        swipeRefreshLayout.onRefresh {
+            onLoadWifiNetworks()
+        }
+        onLoadWifiNetworks()
+    }
+
+    private fun onLoadWifiNetworks() {
         viewModel.getWifiNetworks().observe(this, Observer<List<WifiNetwork>> {
             val adapter = NetworksListAdapter(it) {
                 startActivity<NetworkDetailView>("ssid" to it.ssid)
             }
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
+            swipeRefreshLayout.isRefreshing = false
         })
     }
-
 }
