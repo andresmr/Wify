@@ -7,5 +7,19 @@
     <fragment
         android:id="@+id/networksListFragment"
         android:name="com.andresmr.wify.ui.networkslist.NetworksListFragment"
-        android:label="NetworksListFragment" />
+        android:label="NetworksListFragment" >
+        <action
+            android:id="@+id/action_networksListFragment_to_networkDetailView"
+            app:destination="@id/networkDetailView" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/networkDetailView"
+        android:name="com.andresmr.wify.ui.networkdetail.NetworkDetailView"
+        android:label="NetworkDetailView" >
+        <argument
+            android:name="ssid"
+            app:argType="string"
+            android:defaultValue="UNKNOWN" />
+    </fragment>
 </navigation>

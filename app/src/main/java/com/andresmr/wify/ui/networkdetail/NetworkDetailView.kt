@@ -1,7 +1,10 @@
 package com.andresmr.wify.ui.networkdetail
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
@@ -10,24 +13,36 @@ import com.andresmr.wify.R
 import com.andresmr.wify.entity.WifiNetwork
 import kotlinx.android.synthetic.main.write_tag_view.*
 
-class NetworkDetailView : AppCompatActivity() {
+class NetworkDetailView : Fragment() {
+
+    companion object {
+        fun newInstance() = NetworkDetailView()
+    }
 
     private lateinit var viewModel: NetworkDetailViewModel
     private lateinit var viewModelFactory: NetworkDetailViewModelFactory
     private lateinit var wifiNetwork: WifiNetwork
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.write_tag_view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.write_tag_view, container, false)
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         viewModel = createViewModel()
         observeViewModel()
-        val ssid = intent.getStringExtra("ssid")
-        viewModel.refresh(ssid)
+        val ssid = arguments?.getString("ssid")
+        viewModel.refresh(ssid!!)
     }
 
     private fun createViewModel(): NetworkDetailViewModel {
         viewModelFactory = DependencyInjector.provideNetworkDetailViewModelFactory()
-        return ViewModelProvider(ViewModelStore(), viewModelFactory).get(NetworkDetailViewModel::class.java)
+        return ViewModelProvider(
+            ViewModelStore(),
+            viewModelFactory
+        ).get(NetworkDetailViewModel::class.java)
     }
 
     private fun observeViewModel() {

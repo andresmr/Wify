@@ -1,19 +1,19 @@
 package com.andresmr.wify.ui.networkslist
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.andresmr.wify.R
 import com.andresmr.wify.entity.WifiNetwork
-import com.andresmr.wify.ui.networkdetail.NetworkDetailView
 import kotlinx.android.synthetic.main.networks_list_fragment.*
 import org.jetbrains.anko.support.v4.onRefresh
-import org.jetbrains.anko.support.v4.startActivity
 
 class NetworksListFragment : Fragment() {
 
@@ -23,9 +23,10 @@ class NetworksListFragment : Fragment() {
 
     private lateinit var viewModel: NetworksListViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.networks_list_fragment, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.networks_list_fragment, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -40,8 +41,9 @@ class NetworksListFragment : Fragment() {
 
     private fun onLoadWifiNetworks() {
         viewModel.getWifiNetworks().observe(this, Observer<List<WifiNetwork>> {
-            val adapter = NetworksListAdapter(it) {
-                startActivity<NetworkDetailView>("ssid" to it.ssid)
+            val adapter = NetworksListAdapter(it) { wifiNetwork ->
+                val bundle = bundleOf("ssid" to wifiNetwork.ssid)
+                findNavController().navigate(R.id.networkDetailView, bundle)
             }
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
