@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.andresmr.wify.DependencyInjector
 import com.andresmr.wify.R
+import com.andresmr.wify.createApplicationScreenMessage
 import com.andresmr.wify.entity.WifiNetwork
 import kotlinx.android.synthetic.main.write_tag_view.*
 
@@ -61,6 +62,6 @@ class NetworkDetailView : Fragment() {
     }
 
     private fun showSSID(ssidInfo: String) {
-        ssid.text = ssidInfo
+        ssid.text = createApplicationScreenMessage()
     }
 }
