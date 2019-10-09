@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/networksListFragment">
+    app:startDestination="@id/networksListView">
 
     <fragment
-        android:id="@+id/networksListFragment"
-        android:name="com.andresmr.wify.ui.networkslist.NetworksListFragment"
-        android:label="NetworksListFragment" >
+        android:id="@+id/networksListView"
+        android:name="com.andresmr.wify.ui.networkslist.NetworksListView"
+        android:label="NetworksListFragment"
+        tools:layout="@layout/networks_list_view">
         <action
             android:id="@+id/action_networksListFragment_to_networkDetailView"
             app:destination="@id/networkDetailView"
-            app:enterAnim="@anim/fragment_close_enter" />
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
         android:id="@+id/networkDetailView"
         android:name="com.andresmr.wify.ui.networkdetail.NetworkDetailView"
-        android:label="NetworkDetailView" >
+        android:label="NetworkDetailView"
+        tools:layout="@layout/network_detail_view">
         <argument
             android:name="ssid"
             app:argType="string"

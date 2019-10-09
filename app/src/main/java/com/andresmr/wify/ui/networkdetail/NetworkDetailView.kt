@@ -8,34 +8,33 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
+import androidx.navigation.fragment.navArgs
 import com.andresmr.wify.DependencyInjector
 import com.andresmr.wify.R
 import com.andresmr.wify.createApplicationScreenMessage
 import com.andresmr.wify.entity.WifiNetwork
-import kotlinx.android.synthetic.main.write_tag_view.*
+import kotlinx.android.synthetic.main.network_detail_view.*
 
 class NetworkDetailView : Fragment() {
-
-    companion object {
-        fun newInstance() = NetworkDetailView()
-    }
 
     private lateinit var viewModel: NetworkDetailViewModel
     private lateinit var viewModelFactory: NetworkDetailViewModelFactory
     private lateinit var wifiNetwork: WifiNetwork
+    private val safeArgs: NetworkDetailViewArgs by navArgs()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.write_tag_view, container, false)
+    ): View? = inflater.inflate(R.layout.network_detail_view, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = createViewModel()
         observeViewModel()
-        val ssid = arguments?.getString("ssid")
-        viewModel.refresh(ssid!!)
+        val ssid = safeArgs.ssid
+        viewModel.refresh(ssid)
     }
 
     private fun createViewModel(): NetworkDetailViewModel {
