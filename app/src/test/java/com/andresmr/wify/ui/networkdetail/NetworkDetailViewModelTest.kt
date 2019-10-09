@@ -1,6 +1,6 @@
 package com.andresmr.wify.ui.networkdetail
 
-import com.andresmr.wify.domain.GetWifiNetworkInteractor
+import com.andresmr.wify.domain.interactor.GetWifiNetworkInteractor
 import com.andresmr.wify.entity.WifiNetwork
 import org.hamcrest.CoreMatchers.any
 import org.hamcrest.MatcherAssert.assertThat

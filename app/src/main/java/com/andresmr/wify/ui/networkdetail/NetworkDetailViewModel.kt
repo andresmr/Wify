@@ -2,7 +2,7 @@ package com.andresmr.wify.ui.networkdetail
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.andresmr.wify.domain.GetWifiNetworkInteractor
+import com.andresmr.wify.domain.interactor.GetWifiNetworkInteractor
 
 class NetworkDetailViewModel(private val getWifiNetworkInteractor: GetWifiNetworkInteractor) :
     ViewModel() {

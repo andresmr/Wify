@@ -10,7 +10,8 @@
         android:label="NetworksListFragment" >
         <action
             android:id="@+id/action_networksListFragment_to_networkDetailView"
-            app:destination="@id/networkDetailView" />
+            app:destination="@id/networkDetailView"
+            app:enterAnim="@anim/fragment_close_enter" />
     </fragment>
 
     <fragment

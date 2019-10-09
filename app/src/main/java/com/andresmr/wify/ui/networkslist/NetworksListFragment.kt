@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.andresmr.wify.DependencyInjector
 import com.andresmr.wify.R
 import com.andresmr.wify.entity.WifiNetwork
 import kotlinx.android.synthetic.main.networks_list_fragment.*
@@ -22,6 +24,7 @@ class NetworksListFragment : Fragment() {
     }
 
     private lateinit var viewModel: NetworksListViewModel
+    private lateinit var viewModelFactory: NetworksListViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,12 +34,20 @@ class NetworksListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        viewModel = ViewModelProviders.of(this).get(NetworksListViewModel::class.java)
+        viewModel = createViewModel()
         swipeRefreshLayout.isRefreshing = true
         swipeRefreshLayout.onRefresh {
             onLoadWifiNetworks()
         }
         onLoadWifiNetworks()
+    }
+
+    private fun createViewModel(): NetworksListViewModel {
+        viewModelFactory = DependencyInjector.provideNetworksListViewModelFactory()
+        return ViewModelProvider(
+            ViewModelStore(),
+            viewModelFactory
+        ).get(NetworksListViewModel::class.java)
     }
 
     private fun onLoadWifiNetworks() {
