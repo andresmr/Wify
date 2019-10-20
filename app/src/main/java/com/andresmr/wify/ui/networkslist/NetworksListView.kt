@@ -14,6 +14,7 @@ import com.andresmr.wify.DependencyInjector
 import com.andresmr.wify.R
 import com.andresmr.wify.entity.WifiNetwork
 import kotlinx.android.synthetic.main.networks_list_view.*
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.onRefresh
 
 class NetworksListView : Fragment() {
@@ -29,6 +30,10 @@ class NetworksListView : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(context)
+        floating_action_button.onClick {
+            val action = NetworksListViewDirections.actionNetworksListViewToAddNetworkView()
+            findNavController().navigate(action)
+        }
         viewModel = createViewModel()
         swipeRefreshLayout.isRefreshing = true
         swipeRefreshLayout.onRefresh {
