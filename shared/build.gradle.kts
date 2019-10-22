@@ -29,6 +29,12 @@ kotlin {
     sourceSets["androidMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
     }
+
+    sourceSets["commonTest"].dependencies {
+        implementation("org.jetbrains.kotlin:kotlin-test-common")
+        implementation("org.jetbrains.kotlin:kotlin-test-annotations-common")
+        implementation ("io.mockk:mockk-common:1.9.3")
+    }
 }
 
 val packForXcode by tasks.creating(Sync::class) {
