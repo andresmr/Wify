@@ -46,7 +46,7 @@ class NetworkDetailView : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.getNetwork().observe(this, Observer {
+        viewModel.getNetwork().observe(viewLifecycleOwner, Observer {
             it?.let {
                 if (it.isLoading) {
                     //TODO show loading

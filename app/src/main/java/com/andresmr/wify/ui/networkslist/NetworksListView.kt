@@ -51,7 +51,7 @@ class NetworksListView : Fragment() {
     }
 
     private fun onLoadWifiNetworks() {
-        viewModel.getWifiNetworks().observe(this, Observer<List<WifiNetwork>> {
+        viewModel.getWifiNetworks().observe(viewLifecycleOwner, Observer<List<WifiNetwork>> {
             val adapter = NetworksListAdapter(it) { wifiNetwork ->
                 val action =
                     NetworksListViewDirections.actionNetworksListFragmentToNetworkDetailView(

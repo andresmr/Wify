@@ -1,23 +1,22 @@
-package com.andresmr.wify.ui.networkslist
+package com.andresmr.wify.ui.addnetwork
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.andresmr.wify.R
-import com.andresmr.wify.entity.WifiNetwork
+import com.andresmr.wify.entity.WifiAvailable
 import kotlinx.android.synthetic.main.networks_list_item.view.*
 
-class NetworksListAdapter(
-    private val netWorksList: List<WifiNetwork>,
-    private val listener: (WifiNetwork) -> Unit
-) :
-    RecyclerView.Adapter<NetworksListAdapter.WifiListsHolder>() {
+class NetworksAvailableAdapter(
+    private val wifiAvailableList: List<WifiAvailable>,
+    private val listener: (WifiAvailable) -> Unit
+) : RecyclerView.Adapter<NetworksAvailableAdapter.WifiListsHolder>() {
 
-    override fun getItemCount() = netWorksList.size
+    override fun getItemCount() = wifiAvailableList.size
 
     override fun onBindViewHolder(holder: WifiListsHolder, position: Int) {
-        holder.bind(netWorksList[position], listener)
+        holder.bind(wifiAvailableList[position], listener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WifiListsHolder {
@@ -27,9 +26,9 @@ class NetworksListAdapter(
     }
 
     class WifiListsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(wifiNetwork: WifiNetwork, listener: (WifiNetwork) -> Unit) = with(itemView) {
-            ssid.text = wifiNetwork.ssid
-            setOnClickListener { listener(wifiNetwork) }
+        fun bind(wifiAvailable: WifiAvailable, listener: (WifiAvailable) -> Unit) = with(itemView) {
+            ssid.text = wifiAvailable.ssid
+            setOnClickListener { listener(wifiAvailable) }
         }
     }
 }
