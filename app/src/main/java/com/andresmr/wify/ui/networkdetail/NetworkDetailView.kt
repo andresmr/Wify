@@ -12,14 +12,12 @@ import androidx.navigation.fragment.navArgs
 import com.andresmr.wify.DependencyInjector
 import com.andresmr.wify.R
 import com.andresmr.wify.createApplicationScreenMessage
-import com.andresmr.wify.entity.WifiNetwork
 import kotlinx.android.synthetic.main.network_detail_view.*
 
 class NetworkDetailView : Fragment() {
 
     private lateinit var viewModel: NetworkDetailViewModel
     private lateinit var viewModelFactory: NetworkDetailViewModelFactory
-    private lateinit var wifiNetwork: WifiNetwork
     private val safeArgs: NetworkDetailViewArgs by navArgs()
 
 
@@ -52,7 +50,6 @@ class NetworkDetailView : Fragment() {
                     //TODO show loading
                 } else {
                     it.network?.let {
-                        wifiNetwork = it
                         showSSID(it.ssid)
                     }
                 }
