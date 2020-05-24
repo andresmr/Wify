@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.andresmr.wify.R
+import kotlinx.android.synthetic.main.network_detail_view.*
 
 class NetworkDetailView : Fragment() {
 
@@ -23,34 +25,13 @@ class NetworkDetailView : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        viewModel = createViewModel()
-        observeViewModel()
-        val ssid = safeArgs.ssid
-        viewModel.refresh(ssid)
-    }
-
-    /*private fun createViewModel(): NetworkDetailViewModel {
-        return ViewModelProvider(
-            ViewModelStore(),
-            viewModelFactory
-        ).get(NetworkDetailViewModel::class.java)
-    }*/
-
-    private fun observeViewModel() {
-        viewModel.getNetwork().observe(viewLifecycleOwner, Observer {
-            it?.let {
-                if (it.isLoading) {
-                    //TODO show loading
-                } else {
-                    it.network?.let {
-                        showSSID(it.ssid)
-                    }
-                }
-            }
+        viewModel = ViewModelProvider(this).get(NetworkDetailViewModel::class.java)
+        viewModel.getBySsid(safeArgs.ssid).observe(viewLifecycleOwner, Observer { wifi ->
+            showSSID(wifi.ssid)
         })
     }
 
     private fun showSSID(ssidInfo: String) {
-        //ssid.text = createApplicationScreenMessage()
+        ssid.text = ssidInfo
     }
 }
