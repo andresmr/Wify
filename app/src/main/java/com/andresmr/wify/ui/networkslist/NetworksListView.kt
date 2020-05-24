@@ -7,20 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.andresmr.wify.DependencyInjector
 import com.andresmr.wify.R
-import com.andresmr.wify.entity.WifiNetwork
 import kotlinx.android.synthetic.main.networks_list_view.*
-import org.jetbrains.anko.sdk27.coroutines.onClick
-import org.jetbrains.anko.support.v4.onRefresh
 
 class NetworksListView : Fragment() {
 
     private lateinit var viewModel: NetworksListViewModel
-    private lateinit var viewModelFactory: NetworksListViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,39 +23,27 @@ class NetworksListView : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        val adapter = NetworksListAdapter(context) { wifi ->
+            val action =
+                NetworksListViewDirections.actionNetworksListFragmentToNetworkDetailView(
+                    wifi.ssid
+                )
+            findNavController().navigate(action)
+        }
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
-        floating_action_button.onClick {
+
+        viewModel = ViewModelProvider(this).get(NetworksListViewModel::class.java)
+        viewModel.wifiNetworks.observe(viewLifecycleOwner, Observer { wifiList ->
+            wifiList?.let {
+                adapter.setWifiList(it)
+            }
+        })
+
+        floating_action_button.setOnClickListener {
             val action = NetworksListViewDirections.actionNetworksListViewToAddNetworkView()
             findNavController().navigate(action)
         }
-        viewModel = createViewModel()
-        swipeRefreshLayout.isRefreshing = true
-        swipeRefreshLayout.onRefresh {
-            onLoadWifiNetworks()
-        }
-        onLoadWifiNetworks()
-    }
-
-    private fun createViewModel(): NetworksListViewModel {
-        viewModelFactory = DependencyInjector.provideNetworksListViewModelFactory()
-        return ViewModelProvider(
-            ViewModelStore(),
-            viewModelFactory
-        ).get(NetworksListViewModel::class.java)
-    }
-
-    private fun onLoadWifiNetworks() {
-        viewModel.getWifiNetworks().observe(viewLifecycleOwner, Observer<List<WifiNetwork>> {
-            val adapter = NetworksListAdapter(it) { wifiNetwork ->
-                val action =
-                    NetworksListViewDirections.actionNetworksListFragmentToNetworkDetailView(
-                        wifiNetwork.ssid
-                    )
-                findNavController().navigate(action)
-            }
-            recyclerView.adapter = adapter
-            adapter.notifyDataSetChanged()
-            swipeRefreshLayout.isRefreshing = false
-        })
     }
 }
