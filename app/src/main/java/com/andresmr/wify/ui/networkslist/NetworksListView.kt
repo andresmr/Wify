@@ -29,7 +29,7 @@ class NetworksListView : Fragment() {
                 NetworksListViewDirections.actionNetworksListFragmentToNetworkDetailView(
                     wifi.ssid
                 )
-            //findNavController().navigate(action)
+            findNavController().navigate(action)
         }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
