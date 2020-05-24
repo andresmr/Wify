@@ -53,9 +53,12 @@ dependencies {
     // Testing
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.mockito:mockito-core:2.25.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
+    androidTestImplementation ('androidx.test.espresso:espresso-core:3.1.0', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
 
     // Navigation components
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
