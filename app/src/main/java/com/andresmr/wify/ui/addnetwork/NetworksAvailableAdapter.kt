@@ -1,17 +1,22 @@
 package com.andresmr.wify.ui.addnetwork
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.andresmr.wify.R
+import com.andresmr.wify.entity.Wifi
 import com.andresmr.wify.entity.WifiAvailable
 import kotlinx.android.synthetic.main.networks_list_item.view.*
 
 class NetworksAvailableAdapter(
-    private val wifiAvailableList: List<WifiAvailable>,
-    private val listener: (WifiAvailable) -> Unit
+    context: Context?,
+    private val listener: (Wifi) -> Unit
 ) : RecyclerView.Adapter<NetworksAvailableAdapter.WifiListsHolder>() {
+
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private var wifiAvailableList = emptyList<WifiAvailable>()
 
     override fun getItemCount() = wifiAvailableList.size
 
@@ -20,15 +25,27 @@ class NetworksAvailableAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WifiListsHolder {
-        val inflatedView =
-            LayoutInflater.from(parent.context).inflate(R.layout.networks_list_item, parent, false)
+        val inflatedView = inflater.inflate(R.layout.networks_list_item, parent, false)
         return WifiListsHolder(inflatedView)
     }
 
     class WifiListsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(wifiAvailable: WifiAvailable, listener: (WifiAvailable) -> Unit) = with(itemView) {
+        fun bind(wifiAvailable: WifiAvailable, listener: (Wifi) -> Unit) = with(itemView) {
             ssid.text = wifiAvailable.ssid
-            setOnClickListener { listener(wifiAvailable) }
+            setOnClickListener {
+                listener(
+                    Wifi(
+                        wifiAvailable.ssid,
+                        "1234",
+                        wifiAvailable.authType.name
+                    )
+                )
+            }
         }
+    }
+
+    fun setWifiAvailableList(wifiAvailableList: List<WifiAvailable>) {
+        this.wifiAvailableList = wifiAvailableList
+        notifyDataSetChanged()
     }
 }

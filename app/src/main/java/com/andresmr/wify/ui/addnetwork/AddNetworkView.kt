@@ -11,8 +11,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.andresmr.wify.R
 import com.andresmr.wify.entity.WifiAuthType
@@ -31,8 +32,16 @@ class AddNetworkView : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        val adapter = NetworksAvailableAdapter(context) {
+            viewModel.add(it)
+            Toast.makeText(context, "Wifi added", Toast.LENGTH_LONG).show()
+        }
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
-        viewModel = createViewModel()
+
+        viewModel = ViewModelProvider(this).get(AddNetworkViewModel::class.java)
+
         wifiManager =
             activity?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
@@ -46,9 +55,7 @@ class AddNetworkView : Fragment() {
                 wifiList.forEach {
                     networksAvailable.add(getWifiAvailable(it))
                 }
-                val adapter = NetworksAvailableAdapter(networksAvailable) {}
-                recyclerView.adapter = adapter
-                adapter.notifyDataSetChanged()
+                adapter.setWifiAvailableList(networksAvailable)
             }
         }
         val intentFilter = IntentFilter()
@@ -56,10 +63,6 @@ class AddNetworkView : Fragment() {
         activity?.registerReceiver(wifiScanReceiver, intentFilter)
         wifiManager.startScan()
 
-    }
-
-    private fun createViewModel(): AddNetworkViewModel {
-        return ViewModelProviders.of(this).get(AddNetworkViewModel::class.java)
     }
 
     private fun getWifiAvailable(scanResult: ScanResult): WifiAvailable = WifiAvailable(

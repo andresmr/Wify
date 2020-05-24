@@ -1,32 +1,23 @@
 package com.andresmr.wify.ui.networkslist
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.andresmr.wify.domain.interactor.GetWifiNetworkListInteractor
-import com.andresmr.wify.entity.WifiNetwork
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
+import androidx.lifecycle.viewModelScope
+import com.andresmr.wify.data.db.WifiRoomDatabase
+import com.andresmr.wify.data.repository.WifiRepositoryImpl
+import com.andresmr.wify.domain.repository.WifiRepository
+import com.andresmr.wify.entity.Wifi
 
-class NetworksListViewModel(private val getWifiNetworkListInteractor: GetWifiNetworkListInteractor) :
-    ViewModel() {
+class NetworksListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val wifiNetworks: MutableLiveData<List<WifiNetwork>> by lazy {
-        MutableLiveData<List<WifiNetwork>>().also {
-            loadWifiNetworks()
-        }
-    }
+    private val repository: WifiRepository
 
-    fun getWifiNetworks(): LiveData<List<WifiNetwork>> {
-        return wifiNetworks
-    }
+    val wifiNetworks: LiveData<List<Wifi>>
 
-    private fun loadWifiNetworks() {
-        // Do an asynchronous operation to fetch wifiNetworks.
-        doAsync {
-            uiThread {
-                wifiNetworks.value = getWifiNetworkListInteractor.execute()
-            }
-        }
+    init {
+        val wifiDao = WifiRoomDatabase.getDatabase(application, viewModelScope).wifiDao()
+        repository = WifiRepositoryImpl(wifiDao)
+        wifiNetworks = repository.provideWifiNetworkList()
     }
 }
