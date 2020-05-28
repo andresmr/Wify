@@ -5,17 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.andresmr.wify.R
+import com.andresmr.wify.di.Injector
 import kotlinx.android.synthetic.main.network_detail_view.*
 
 class NetworkDetailView : Fragment() {
 
-    private lateinit var viewModel: NetworkDetailViewModel
     private val safeArgs: NetworkDetailViewArgs by navArgs()
 
+    private val viewModel: NetworkDetailViewModel by viewModels {
+        Injector.provideNetworkDetailViewModelFactory(requireActivity(), safeArgs.ssid)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,8 +28,7 @@ class NetworkDetailView : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(NetworkDetailViewModel::class.java)
-        viewModel.getBySsid(safeArgs.ssid).observe(viewLifecycleOwner, Observer { wifi ->
+        viewModel.network.observe(viewLifecycleOwner, Observer { wifi ->
             showSSID(wifi.ssid)
         })
     }

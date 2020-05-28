@@ -1,20 +1,14 @@
 package com.andresmr.wify.ui.networkdetail
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
-import com.andresmr.wify.data.db.WifiRoomDatabase
-import com.andresmr.wify.data.repository.WifiRepositoryImpl
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import com.andresmr.wify.domain.repository.WifiRepository
+import com.andresmr.wify.entity.Wifi
 
-class NetworkDetailViewModel(application: Application) : AndroidViewModel(application) {
+class NetworkDetailViewModel(
+    repository: WifiRepository,
+    ssid: String
+) : ViewModel() {
 
-    private val repository: WifiRepository
-
-    init {
-        val wifiDao = WifiRoomDatabase.getDatabase(application, viewModelScope).wifiDao()
-        repository = WifiRepositoryImpl(wifiDao)
-    }
-
-    fun getBySsid(ssid: String) = repository.getNetworkBySsid(ssid)
+    val network: LiveData<Wifi> = repository.getNetwork(ssid)
 }

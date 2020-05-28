@@ -17,16 +17,19 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.andresmr.wify.R
+import com.andresmr.wify.di.Injector
 import com.andresmr.wify.entity.WifiAuthType
 import com.andresmr.wify.entity.WifiAvailable
 import kotlinx.android.synthetic.main.add_network_view.*
 
 class AddNetworkView : Fragment() {
 
-    private lateinit var viewModel: AddNetworkViewModel
+    private val viewModel: AddNetworkViewModel by viewModels {
+        Injector.provideAddNetworkViewModelFactory(requireActivity())
+    }
     private lateinit var wifiManager: WifiManager
 
     override fun onCreateView(
@@ -38,13 +41,11 @@ class AddNetworkView : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val adapter = NetworksAvailableAdapter(context) {
-            viewModel.add(it)
+            viewModel.addNetwork(it)
             Toast.makeText(context, "Wifi added", Toast.LENGTH_LONG).show()
         }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
-
-        viewModel = ViewModelProvider(this).get(AddNetworkViewModel::class.java)
 
         wifiManager =
             activity?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
