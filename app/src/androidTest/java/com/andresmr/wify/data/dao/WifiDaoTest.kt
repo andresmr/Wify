@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.runner.AndroidJUnit4
 import com.andresmr.wify.data.db.WifiRoomDatabase
 import com.andresmr.wify.entity.Wifi
+import com.andresmr.wify.utils.waitForValue
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

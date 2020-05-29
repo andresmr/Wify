@@ -52,12 +52,14 @@ dependencies {
 
     // Testing
     testImplementation "junit:junit:$rootProject.junitVersion"
-    testImplementation 'org.mockito:mockito-core:2.25.0'
+    testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutines"
 
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestImplementation "androidx.test.ext:junit:$rootProject.testExtJunit"
     androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation "org.mockito:mockito-android:$rootProject.mockitoVersion"
 
     // Navigation components
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

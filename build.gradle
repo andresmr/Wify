@@ -10,7 +10,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         // NOTE: Do not place your application dependencies here; they belong
@@ -37,6 +37,7 @@ ext {
     espressoVersion = '3.1.1'
     junitVersion = '4.13'
     materialVersion = '1.1.0'
+    mockitoVersion = '3.3.3'
     roomVersion = '2.2.5'
     testExtJunit = '1.1.1'
     workVersion = '2.1.0'

@@ -1,29 +1,34 @@
 package com.andresmr.wify.ui.networkdetail
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import androidx.test.platform.app.InstrumentationRegistry
-import com.andresmr.wify.data.db.WifiRoomDatabase
-import com.andresmr.wify.data.repository.WifiRepositoryImpl
+import androidx.lifecycle.LiveData
 import com.andresmr.wify.domain.repository.WifiRepository
+import com.andresmr.wify.entity.Wifi
+import com.andresmr.wify.utils.mock
+import org.junit.Assert
 import org.junit.Before
-import org.junit.Rule
+import org.junit.Test
+import org.mockito.Mockito.`when`
+import org.mockito.MockitoAnnotations
 
 class NetworkDetailViewModelTest {
 
-    private lateinit var wifiRoomDatabase: WifiRoomDatabase
     private lateinit var viewModel: NetworkDetailViewModel
-
-    @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
+    private val wifiRepository: WifiRepository = mock()
+    private val netWorkLiveData: LiveData<Wifi> = mock()
+    private val network: Wifi = mock()
 
     @Before
     fun setUp() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        wifiRoomDatabase =
-            Room.inMemoryDatabaseBuilder(context, WifiRoomDatabase::class.java).build()
+        MockitoAnnotations.initMocks(this)
+        `when`(network.ssid).thenReturn("1234")
+        `when`(netWorkLiveData.value).thenReturn(network)
+        `when`(wifiRepository.getNetwork(network.ssid)).thenReturn(netWorkLiveData)
+        viewModel = NetworkDetailViewModel(wifiRepository, network.ssid)
+    }
 
-        val repository: WifiRepository = WifiRepositoryImpl(wifiRoomDatabase.wifiDao())
-        //viewModel = NetworkDetailViewModel()
+    @Test
+    @Throws(InterruptedException::class)
+    fun testDefaultValues() {
+        Assert.assertEquals(viewModel.network.value, network)
     }
 }

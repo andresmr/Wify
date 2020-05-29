@@ -1,4 +1,4 @@
-package com.andresmr.wify.data.dao
+package com.andresmr.wify.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -24,5 +24,19 @@ fun <T> LiveData<T>.waitForValue(): T {
     this.observeForever(observer)
     latch.await(2, TimeUnit.SECONDS)
 
+    return data[0] as T
+}
+
+@Throws(InterruptedException::class)
+fun <T> getValue(liveData: LiveData<T>): T {
+    val data = arrayOfNulls<Any>(1)
+    val latch = CountDownLatch(1)
+    liveData.observeForever { o ->
+        data[0] = o
+        latch.countDown()
+    }
+    latch.await(2, TimeUnit.SECONDS)
+
+    @Suppress("UNCHECKED_CAST")
     return data[0] as T
 }

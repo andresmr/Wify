@@ -4,7 +4,7 @@ import com.andresmr.wify.data.dao.WifiDao
 import com.andresmr.wify.domain.repository.WifiRepository
 import com.andresmr.wify.entity.Wifi
 
-class WifiRepositoryImpl(private val wifiDao: WifiDao) : WifiRepository {
+class WifiRepositoryImpl private constructor(private val wifiDao: WifiDao) : WifiRepository {
 
     override fun getNetworks() = wifiDao.getAlphabetizedWifis()
 
