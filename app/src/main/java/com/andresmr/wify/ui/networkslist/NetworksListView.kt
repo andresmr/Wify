@@ -28,12 +28,8 @@ class NetworksListView : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val adapter = NetworksListAdapter(context) { wifi ->
-            val action =
-                NetworksListViewDirections.actionNetworksListFragmentToNetworkDetailView(
-                    wifi.ssid
-                )
-            findNavController().navigate(action)
+        val adapter = NetworksListAdapter(context) {
+            navigateToNetworkDetail(it.ssid)
         }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -45,8 +41,18 @@ class NetworksListView : Fragment() {
         })
 
         floating_action_button.setOnClickListener {
-            val action = NetworksListViewDirections.actionNetworksListViewToAddNetworkView()
-            findNavController().navigate(action)
+            navigateToAddNetwork()
         }
+    }
+
+    private fun navigateToAddNetwork() {
+        val action = NetworksListViewDirections.actionNetworksListViewToAddNetworkView()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToNetworkDetail(ssid: String) {
+        val action =
+            NetworksListViewDirections.actionNetworksListFragmentToNetworkDetailView(ssid)
+        findNavController().navigate(action)
     }
 }

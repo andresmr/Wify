@@ -40,12 +40,14 @@ class AddNetworkView : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        available_networks_title.text = "Select available network"
+
         val adapter = NetworksAvailableAdapter(context) {
             viewModel.addNetwork(it)
             Toast.makeText(context, "Wifi added", Toast.LENGTH_LONG).show()
         }
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        available_networks_list.adapter = adapter
+        available_networks_list.layoutManager = LinearLayoutManager(context)
 
         wifiManager =
             activity?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
