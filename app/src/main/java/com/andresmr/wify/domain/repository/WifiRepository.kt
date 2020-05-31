@@ -5,9 +5,9 @@ import com.andresmr.wify.entity.Wifi
 
 interface WifiRepository {
 
-    fun provideWifiNetworkList(): LiveData<List<Wifi>>
+    fun getNetworks(): LiveData<List<Wifi>>
 
-    suspend fun addWifiNetwork(wifi: Wifi)
+    fun getNetwork(ssid: String): LiveData<Wifi>
 
-    fun getNetworkBySsid(ssid: String): LiveData<Wifi>
+    suspend fun addNetwork(wifi: Wifi)
 }

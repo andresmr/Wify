@@ -1,38 +1,34 @@
 package com.andresmr.wify.ui.networkdetail
 
-import com.andresmr.wify.domain.interactor.GetWifiNetworkInteractor
-import com.andresmr.wify.entity.WifiNetwork
-import org.hamcrest.CoreMatchers.any
-import org.hamcrest.MatcherAssert.assertThat
+import androidx.lifecycle.LiveData
+import com.andresmr.wify.domain.repository.WifiRepository
+import com.andresmr.wify.entity.Wifi
+import com.andresmr.wify.utils.mock
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
 
 class NetworkDetailViewModelTest {
 
-    private lateinit var networkDetailViewModel: NetworkDetailViewModel
-
-    private val getWifiNetworkInteractor: GetWifiNetworkInteractor =
-        mock(GetWifiNetworkInteractor::class.java)
-    private val wifiNetwork: WifiNetwork = mock(WifiNetwork::class.java)
-
+    private lateinit var viewModel: NetworkDetailViewModel
+    private val wifiRepository: WifiRepository = mock()
+    private val netWorkLiveData: LiveData<Wifi> = mock()
+    private val network: Wifi = mock()
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        networkDetailViewModel = NetworkDetailViewModel(getWifiNetworkInteractor)
+        `when`(network.ssid).thenReturn("1234")
+        `when`(netWorkLiveData.value).thenReturn(network)
+        `when`(wifiRepository.getNetwork(network.ssid)).thenReturn(netWorkLiveData)
+        viewModel = NetworkDetailViewModel(wifiRepository, network.ssid)
     }
 
     @Test
-    fun shouldLoadWifiNetwork() {
-        `when`(getWifiNetworkInteractor.execute(anyString())).thenReturn(wifiNetwork)
-        networkDetailViewModel.refresh("ssid")
-        assertThat(
-            networkDetailViewModel.getNetwork().value,
-            any(NetworkDetailUiModelWrapper::class.java)
-        )
+    @Throws(InterruptedException::class)
+    fun testDefaultValues() {
+        Assert.assertEquals(viewModel.network.value, network)
     }
 }

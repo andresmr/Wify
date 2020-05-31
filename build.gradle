@@ -10,7 +10,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         // NOTE: Do not place your application dependencies here; they belong
@@ -31,9 +31,14 @@ task clean(type: Delete) {
 }
 
 ext {
-    roomVersion = '2.2.5'
     archLifecycleVersion = '2.2.0'
     coreTestingVersion = '2.1.0'
-    materialVersion = '1.1.0'
     coroutines = '1.3.4'
+    espressoVersion = '3.2.0'
+    junitVersion = '4.13'
+    materialVersion = '1.1.0'
+    mockitoVersion = '3.3.3'
+    roomVersion = '2.2.5'
+    testExtJunit = '1.1.1'
+    workVersion = '2.1.0'
 }
