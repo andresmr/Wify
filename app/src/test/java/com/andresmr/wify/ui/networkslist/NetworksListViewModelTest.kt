@@ -2,7 +2,7 @@ package com.andresmr.wify.ui.networkslist
 
 import androidx.lifecycle.LiveData
 import com.andresmr.wify.domain.repository.WifiRepository
-import com.andresmr.wify.entity.Wifi
+import com.andresmr.wify.entity.WifiNetwork
 import com.andresmr.wify.utils.mock
 import org.junit.Assert
 import org.junit.Before
@@ -14,8 +14,8 @@ class NetworksListViewModelTest {
 
     private lateinit var viewModel: NetworksListViewModel
     private val wifiRepository: WifiRepository = mock()
-    private val networkListLiveData: LiveData<List<Wifi>> = mock()
-    private val networkList: List<Wifi> = mock()
+    private val networkListLiveData: LiveData<List<WifiNetwork>> = mock()
+    private val networkList: List<WifiNetwork> = mock()
 
 
     @Before

@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.andresmr.wify.R
-import com.andresmr.wify.entity.Wifi
+import com.andresmr.wify.entity.WifiNetwork
 import kotlinx.android.synthetic.main.networks_list_item.view.*
 
 class NetworksListAdapter(
     context: Context?,
-    private val listener: (Wifi) -> Unit
+    private val listener: (WifiNetwork) -> Unit
 ) :
     RecyclerView.Adapter<NetworksListAdapter.WifiListsHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var wifiList = emptyList<Wifi>()
+    private var wifiList = emptyList<WifiNetwork>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WifiListsHolder {
         val inflatedView = inflater.inflate(R.layout.networks_list_item, parent, false)
@@ -29,13 +29,13 @@ class NetworksListAdapter(
 
     override fun getItemCount() = wifiList.size
 
-    internal fun setWifiList(wifiList: List<Wifi>) {
+    internal fun setWifiList(wifiList: List<WifiNetwork>) {
         this.wifiList = wifiList
         notifyDataSetChanged()
     }
 
     inner class WifiListsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(wifi: Wifi, listener: (Wifi) -> Unit) = with(itemView) {
+        fun bind(wifi: WifiNetwork, listener: (WifiNetwork) -> Unit) = with(itemView) {
             ssid.text = wifi.ssid
             setOnClickListener { listener(wifi) }
         }

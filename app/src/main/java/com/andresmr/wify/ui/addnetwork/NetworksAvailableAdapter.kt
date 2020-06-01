@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.andresmr.wify.R
-import com.andresmr.wify.entity.Wifi
+import com.andresmr.wify.entity.WifiAuthType
 import com.andresmr.wify.entity.WifiAvailable
+import com.andresmr.wify.entity.WifiNetwork
 import kotlinx.android.synthetic.main.networks_list_item.view.*
 
 class NetworksAvailableAdapter(
     context: Context?,
-    private val listener: (Wifi) -> Unit
+    private val listener: (WifiNetwork) -> Unit
 ) : RecyclerView.Adapter<NetworksAvailableAdapter.WifiListsHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -30,14 +31,14 @@ class NetworksAvailableAdapter(
     }
 
     class WifiListsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(wifiAvailable: WifiAvailable, listener: (Wifi) -> Unit) = with(itemView) {
+        fun bind(wifiAvailable: WifiAvailable, listener: (WifiNetwork) -> Unit) = with(itemView) {
             ssid.text = wifiAvailable.ssid
             setOnClickListener {
                 listener(
-                    Wifi(
+                    WifiNetwork(
                         wifiAvailable.ssid,
                         "1234",
-                        wifiAvailable.authType.name
+                        WifiAuthType.WPA2_PSK
                     )
                 )
             }

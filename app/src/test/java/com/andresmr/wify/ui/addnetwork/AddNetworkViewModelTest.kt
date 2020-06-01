@@ -1,7 +1,7 @@
 package com.andresmr.wify.ui.addnetwork
 
 import com.andresmr.wify.domain.repository.WifiRepository
-import com.andresmr.wify.entity.Wifi
+import com.andresmr.wify.entity.WifiNetwork
 import com.andresmr.wify.utils.mock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +21,7 @@ class AddNetworkViewModelTest {
     private val testDispatcher = TestCoroutineDispatcher()
     private lateinit var viewModel: AddNetworkViewModel
     private val repository: WifiRepository = mock()
-    private val network: Wifi = mock()
+    private val network: WifiNetwork = mock()
 
     @Before
     fun setUp() {
