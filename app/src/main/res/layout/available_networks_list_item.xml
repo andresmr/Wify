@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="wifiavailable"
+            type="com.andresmr.wify.entity.WifiAvailable" />
+
+        <variable
+            name="viewmodel"
+            type="com.andresmr.wify.ui.addnetwork.AddNetworkViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/single_line_item_height"
+        android:onClick="@{() -> viewmodel.addNetwork(wifiavailable)}">
+
+        <TextView
+            android:id="@+id/ssid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            android:text="@{wifiavailable.ssid}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="SSID" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
