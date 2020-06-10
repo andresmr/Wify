@@ -11,8 +11,6 @@ import com.andresmr.wify.entity.WifiAvailable
 class AvailableNetworksAdapter(private val viewModel: AddNetworkViewModel) :
     ListAdapter<WifiAvailable, AvailableNetworksAdapter.ViewHolder>(ItemDiffCallback()) {
 
-    override fun getItemCount() = viewModel.items.value?.size ?: 0
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(viewModel, item)

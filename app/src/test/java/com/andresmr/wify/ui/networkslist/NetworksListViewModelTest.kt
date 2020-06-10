@@ -29,6 +29,6 @@ class NetworksListViewModelTest {
     @Test
     @Throws(InterruptedException::class)
     fun testDefaultValues() {
-        Assert.assertEquals(viewModel.wifiNetworks.value, networkList)
+        Assert.assertEquals(viewModel.items.value, networkList)
     }
 }

@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.andresmr.wify.R
+import com.andresmr.wify.databinding.NetworksListViewBinding
 import com.andresmr.wify.di.Injector
-import kotlinx.android.synthetic.main.networks_list_view.*
 
 class NetworksListView : Fragment() {
 
@@ -19,30 +19,36 @@ class NetworksListView : Fragment() {
         Injector.provideNetworksListViewModelFactory(requireActivity())
     }
 
+    private lateinit var binding: NetworksListViewBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.networks_list_view, container, false)
+    ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.networks_list_view, container, false)
+        binding.lifecycleOwner = this
+        binding.viewmodel = viewModel
+        binding.storedNetworksList.apply {
+            adapter = NetworksListAdapter(viewModel)
+        }
+        return binding.root
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        val adapter = NetworksListAdapter(context) {
-            navigateToNetworkDetail(it.ssid)
-        }
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
-
-        viewModel.wifiNetworks.observe(viewLifecycleOwner, Observer { wifiList ->
-            wifiList?.let {
-                adapter.setWifiList(it)
-            }
+        viewModel.navigateToDetails.observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()
+                ?.let { // Only proceed if the event has never been handled
+                    navigateToNetworkDetail(event.peekContent())
+                }
         })
 
-        floating_action_button.setOnClickListener {
-            navigateToAddNetwork()
-        }
+        viewModel.navigateToAddNetwork.observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()?.let {
+                navigateToAddNetwork()
+            }
+        })
     }
 
     private fun navigateToAddNetwork() {
