@@ -9,7 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.andresmr.wify.R
-import com.andresmr.wify.data.db.WifiRoomDatabase
+import com.andresmr.wify.data.db.AppDatabase
 import com.andresmr.wify.ui.MainActivity
 import org.junit.Before
 import org.junit.Rule
@@ -19,7 +19,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NetworksListViewTest {
 
-    private lateinit var database: WifiRoomDatabase
+    private lateinit var database: AppDatabase
 
     @get:Rule
     val activityRule = ActivityTestRule(MainActivity::class.java, false, false)
@@ -27,7 +27,7 @@ class NetworksListViewTest {
     @Before
     fun setUp() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        database = Room.inMemoryDatabaseBuilder(context, WifiRoomDatabase::class.java).build()
+        database = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         database.wifiDao().deleteAll()
         activityRule.launchActivity(null)
     }

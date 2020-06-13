@@ -13,17 +13,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.andresmr.wify.R
+import com.andresmr.wify.databinding.AddNetworkViewBinding
 import com.andresmr.wify.di.Injector
 import com.andresmr.wify.entity.WifiAuthType
 import com.andresmr.wify.entity.WifiAvailable
-import kotlinx.android.synthetic.main.add_network_view.*
 
 class AddNetworkView : Fragment() {
 
@@ -31,23 +30,25 @@ class AddNetworkView : Fragment() {
         Injector.provideAddNetworkViewModelFactory(requireActivity())
     }
     private lateinit var wifiManager: WifiManager
+    private lateinit var binding: AddNetworkViewBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.add_network_view, container, false)
+    ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.add_network_view, container, false)
+
+        binding.lifecycleOwner = this
+        binding.viewmodel = viewModel
+        binding.availableNetworksList.apply {
+            adapter = AvailableNetworksAdapter(viewModel)
+        }
+        return binding.root
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        available_networks_title.text = "Select available network"
-
-        val adapter = NetworksAvailableAdapter(context) {
-            viewModel.addNetwork(it)
-            Toast.makeText(context, "Wifi added", Toast.LENGTH_LONG).show()
-        }
-        available_networks_list.adapter = adapter
-        available_networks_list.layoutManager = LinearLayoutManager(context)
 
         wifiManager =
             activity?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -62,7 +63,8 @@ class AddNetworkView : Fragment() {
                 wifiList.forEach {
                     networksAvailable.add(getWifiAvailable(it))
                 }
-                adapter.setWifiAvailableList(networksAvailable)
+                //TODO: Load scanned wifis on list
+                viewModel.setItems(networksAvailable)
             }
         }
         val intentFilter = IntentFilter()

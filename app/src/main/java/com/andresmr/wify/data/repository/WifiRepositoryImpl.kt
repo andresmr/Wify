@@ -2,7 +2,7 @@ package com.andresmr.wify.data.repository
 
 import com.andresmr.wify.data.dao.WifiDao
 import com.andresmr.wify.domain.repository.WifiRepository
-import com.andresmr.wify.entity.Wifi
+import com.andresmr.wify.entity.WifiNetwork
 
 class WifiRepositoryImpl private constructor(private val wifiDao: WifiDao) : WifiRepository {
 
@@ -10,7 +10,7 @@ class WifiRepositoryImpl private constructor(private val wifiDao: WifiDao) : Wif
 
     override fun getNetwork(ssid: String) = wifiDao.getById(ssid)
 
-    override suspend fun addNetwork(wifi: Wifi) {
+    override suspend fun addNetwork(wifi: WifiNetwork) {
         wifiDao.insert(wifi)
     }
 

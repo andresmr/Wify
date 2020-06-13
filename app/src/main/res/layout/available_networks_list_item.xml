@@ -5,19 +5,21 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
-            name="network"
-            type="com.andresmr.wify.entity.WifiNetwork" />
+            name="wifiavailable"
+            type="com.andresmr.wify.entity.WifiAvailable" />
 
         <variable
             name="viewmodel"
-            type="com.andresmr.wify.ui.networkslist.NetworksListViewModel" />
+            type="com.andresmr.wify.ui.addnetwork.AddNetworkViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/single_line_item_height"
-        android:onClick="@{() -> viewmodel.onNetworkDetail(network.ssid)}">
+        android:onClick="@{() -> viewmodel.addNetwork(wifiavailable)}">
 
         <TextView
             android:id="@+id/ssid"
@@ -27,7 +29,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
-            android:text="@{network.ssid}"
+            android:text="@{wifiavailable.ssid}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
