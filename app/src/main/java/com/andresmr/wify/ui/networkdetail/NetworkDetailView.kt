@@ -16,13 +16,14 @@ import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.andresmr.wify.R
+import com.andresmr.wify.databinding.NetworkDetailViewBinding
 import com.andresmr.wify.di.Injector
-import kotlinx.android.synthetic.main.network_detail_view.*
 
 class NetworkDetailView : Fragment() {
 
@@ -31,19 +32,22 @@ class NetworkDetailView : Fragment() {
     private val viewModel: NetworkDetailViewModel by viewModels {
         Injector.provideNetworkDetailViewModelFactory(requireActivity(), safeArgs.ssid)
     }
+    private lateinit var binding: NetworkDetailViewBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.network_detail_view, container, false)
+    ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.network_detail_view, container, false)
+        binding.lifecycleOwner = this
+        binding.viewmodel = viewModel
+        return binding.root
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.network.observe(viewLifecycleOwner, Observer { wifi ->
-            showSSID(wifi.ssid)
-            showScanInfo()
-        })
+        viewModel.network.observe(viewLifecycleOwner, Observer {})
     }
 
     override fun onAttach(context: Context) {
@@ -82,29 +86,9 @@ class NetworkDetailView : Fragment() {
         nfcAdapter.disableForegroundDispatch(activity)
     }
 
-    private fun showSSID(ssidInfo: String) {
-        ssid.text = ssidInfo
-    }
-
-    private fun showScanInfo() {
-        scanningInfo.text = getString(R.string.scan_info)
-    }
-
     fun onTagDetected(tag: Tag) {
-        if (viewModel.writeNetworkOnTag(tag)) {
-            showWriteOnTagSuccessfulInfo()
-        } else {
-            showWriteOnTagErrorInfo()
-        }
+        viewModel.writeNetworkOnTag(tag)
         vibrate()
-    }
-
-    private fun showWriteOnTagSuccessfulInfo() {
-        scanningInfo.text = getString(R.string.write_tag_success)
-    }
-
-    private fun showWriteOnTagErrorInfo() {
-        scanningInfo.text = getString(R.string.write_tag_error)
     }
 
     private fun vibrate() {

@@ -1,43 +1,44 @@
 package com.andresmr.wify.ui.networkslist
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.andresmr.wify.R
+import com.andresmr.wify.databinding.NetworksListItemBinding
 import com.andresmr.wify.entity.WifiNetwork
-import kotlinx.android.synthetic.main.networks_list_item.view.*
 
-class NetworksListAdapter(
-    context: Context?,
-    private val listener: (WifiNetwork) -> Unit
-) :
-    RecyclerView.Adapter<NetworksListAdapter.WifiListsHolder>() {
+class NetworksListAdapter(private val viewModel: NetworksListViewModel) :
+    ListAdapter<WifiNetwork, NetworksListAdapter.ViewHolder>(ItemDiffCallback()) {
 
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var wifiList = emptyList<WifiNetwork>()
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WifiListsHolder {
-        val inflatedView = inflater.inflate(R.layout.networks_list_item, parent, false)
-        return WifiListsHolder(inflatedView)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position)
+        holder.bind(viewModel, item)
     }
 
-    override fun onBindViewHolder(holder: WifiListsHolder, position: Int) {
-        holder.bind(wifiList[position], listener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = NetworksListItemBinding.inflate(layoutInflater, parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun getItemCount() = wifiList.size
+    inner class ViewHolder(private val binding: NetworksListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    internal fun setWifiList(wifiList: List<WifiNetwork>) {
-        this.wifiList = wifiList
-        notifyDataSetChanged()
-    }
-
-    inner class WifiListsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(wifi: WifiNetwork, listener: (WifiNetwork) -> Unit) = with(itemView) {
-            ssid.text = wifi.ssid
-            setOnClickListener { listener(wifi) }
+        fun bind(viewModel: NetworksListViewModel, item: WifiNetwork) {
+            binding.network = item
+            binding.viewmodel = viewModel
+            binding.executePendingBindings()
         }
+    }
+}
+
+class ItemDiffCallback : DiffUtil.ItemCallback<WifiNetwork>() {
+    override fun areItemsTheSame(oldItem: WifiNetwork, newItem: WifiNetwork): Boolean {
+        return oldItem.ssid == newItem.ssid
+    }
+
+    override fun areContentsTheSame(oldItem: WifiNetwork, newItem: WifiNetwork): Boolean {
+        return oldItem == newItem
     }
 }

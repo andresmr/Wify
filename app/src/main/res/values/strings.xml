@@ -6,4 +6,5 @@
     <string name="error_field_null">The field can not be null</string>
     <string name="write_tag_success">Tag has successfully been written</string>
     <string name="write_tag_error">There has been an error, please try again</string>
+    <string name="available_networks_title">Available Wi-Fi networks</string>
 </resources>
